@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
-		<!-- jdk版本 -->
+		<!-- jdk版本, -->
 		<jdk.version>8</jdk.version>
 		<!-- 设置字符编码 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
