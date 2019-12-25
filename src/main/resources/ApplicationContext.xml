@@ -2,8 +2,8 @@
 	<beans>
 		
 		
-		<bean id = "OrderDao" class = "cn.kgc.tangcco.tcbd1017.on.impl.OrderDaoImpl"/>
-		<bean id = "OrderService" class = "cn.kgc.tangcco.tcbd1017.on.impl.OrderServiceImpl"/>
+		<bean id = "OrderDao" class = "cn.kgc.tangcco.tcbd1017.liufuxiang.dao.impl.OrderDaoImpl"/>
+		<bean id = "OrderService" class = "cn.kgc.tangcco.tcbd1017.liufuxiang.service.impl.OrderServiceImpl"/>
 
 		
 	</beans>
