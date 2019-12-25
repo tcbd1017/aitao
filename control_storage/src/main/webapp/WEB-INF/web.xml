@@ -10,7 +10,7 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
-  
+
   <error-page>
 		  <error-code>404</error-code>
 		  <location>/errors.jsp</location>
