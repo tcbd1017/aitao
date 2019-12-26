@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>留言列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../css/oksub.css">
+</head>
+<body>
+	<form lay-filter="message" class="layui-form" action="" method="post">
+		<div class="layui-form-item">
+			<label class="layui-form-label">体重</label>
+			<div class="layui-input-inline">
+				<input class="layui-input" type="text" id="wei" name="wei" value=""  required lay-verify="required" placeholder="请输入体重"
+				 autocomplete="off" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">身高</label>
+			<div class="layui-input-inline">
+				<input class="layui-input" type="text" id="hei" name="hei" value="" required lay-verify="required" placeholder="请输入身高"
+				 autocomplete="off" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">健体目标</label>
+			<div class="layui-input-inline">
+				<input class="layui-input" type="text" id="target" name="target" value="" required lay-verify="required" placeholder="请输入健体目标"
+				 autocomplete="off" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">打卡次数</label>
+			<div class="layui-input-inline">
+				<input class="layui-input" type="text" id="dkid" name="dkid" value="" required lay-verify="required|phone" placeholder="请输入打卡次数"
+				 autocomplete="off" />
+			</div>
+		</div>
+		<div class="layui-form-item" id="summitBtnGroup">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>
+<script type="text/javascript">
+	//Demo
+	layui.use(['form','jquery','element'], function(){
+	  var form = layui.form;
+	  var $ = layui.jquery;
+	  var element = layui.element
+	  // let $url = "";
+	  // $.getJSON("res/serverconfig.json",(responseText) =>{
+		 //  $url = responseText.protocol +  responseText.domain+ responseText.port+ responseText.context;
+	  // })
+	  //监听提交
+	  form.on('submit(message)', function(data){
+	   window.console.log(data.field)
+	   $.ajax({
+		   type : "post",
+		   url :"http://localhost:8080/jianshen/jianshen.action?methodName=setUser",//找刘福祥
+		   data : data.field,
+		   dataType : "json",
+		   success : function(responseText){
+			   window.console.log(responseText)
+			   switch (responseText.status){
+			   	case "success":				
+				layer.msg('修改成功，跳转中。。', {
+				  icon: 6,
+				  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+				}, function(){
+				  window.location.replace("main.html")
+				});
+			   		break;
+			   	default:
+					$("#msg").text("修改失败")
+			   		break;
+			   }
+		   },
+		   error : function(){			   
+			   $("#msg").text("数据接口异常")
+		   }	   
+	   })
+	    return false;
+	  });
+	});
+
+</script>
