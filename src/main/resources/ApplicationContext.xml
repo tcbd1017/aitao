@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<beans>
 		
+		
+		<bean id = "JianShenDao" class = "cn.kgc.tcbd1017.lixin.dao.impl.JianShenDaoImpl"/>
+		<bean id = "JianShenService" class = "cn.kgc.tcbd1017.lixin.service.impl.JianShenServiceImpl"/>
+
+		
+	</beans>
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+	<beans>
+		
 
 		<bean id = "OrderDao" class = "cn.kgc.tangcco.tcbd1017.liufuxiang.dao.impl.OrderDaoImpl"/>
 		<bean id = "OrderService" class = "cn.kgc.tangcco.tcbd1017.liufuxiang.service.impl.OrderServiceImpl"/>
@@ -11,6 +24,7 @@
 
 		
 	</beans>
+
 
 
 
