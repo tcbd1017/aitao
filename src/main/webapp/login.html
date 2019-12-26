@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" type="text/javascript" rel="stylesheet">
+    <link href="css/bootsnav.css" type="text/css" rel="stylesheet">
+    <link href="css/normalize.css" type="text/css" rel="stylesheet">
+    <link href="css/css.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-1.11.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/bootsnav.js" type="text/javascript"></script>
+    <script src="js/jquery.js" type="text/javascript"></script>
+    <!--[if IE]><script src="js/html5.js"></script><![endif]-->
+    <title>登录</title>
+    <style>
+        #scan {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url(images/13.png);
+            background-size: cover;
+        }
+        
+        #faceDL {
+            width: 534px;
+            height: 400px;
+            margin: 40px auto 0;
+            transform: perspective(600px) rotateY(0deg);
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="logobg_style" style="background-image: url(images/slide-1.jpg);background-size: 100%;">
+
+    <div class="login-form" id="denglu">
+        <div class="login-content">
+            <h1 class="title_name">账户登录</h1>
+            <form method="post" role="form" id="form_login" class="login_padding" action="/tcbd1017/front/login.action?methodName=login">
+                <div class="form-group clearfix">
+
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="icon_user"></i>
+                        </div>
+                        <input type="text" class="form-control" name="account" id="account" placeholder="账号" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="icon_password"></i>
+                        </div>
+
+                        <input type="password" class="form-control" name="password" id="password" placeholder="密码" autocomplete="off">
+                    </div>
+
+                </div>
+                <div class=" textright"><a href="#" class="forget">忘记密码？</a></div>
+                <div class="tishi"></div>
+                <div class="form-group">
+                    <a href="javascript:;" type="submit" class="btn btn-danger btn-block btn-login" id="loginBtn" onClick="loginBtn">
+                        <i class="fa fa-sign-in"></i> 登录
+                    </a>
+                </div>
+                <div class="form-group">
+                    <a href="javascript:;" type="button" class="btn btn-danger btn-block btn-login" id="loginFace">
+                        <i class="fa fa-sign-in"></i> 人脸登录
+                    </a>
+                </div>
+                <div class=" textright"><a href="registered.html" class="forget">立即注册</a></div>
+                <!-- Implemented in v1.1.4 -->
+                <div class="form-group"></div>
+            </form>
+        </div>
+
+    </div>
+    <div id="faceDL" hidden="">
+        <video id="video" style="width:534px;height: 400px;" autoplay="autoplay"></video>
+        <canvas id="canvas" style="display:none; width:534px; height: 400px;"></canvas>
+        <div id="scan"></div>
+    </div>
+</body>
+
+</html>
+<script src="js/TweenLite/TweenLite.min.js "></script>
+<script src="js/TweenLite/EasePack.min.js "></script>
+<script src="js/TweenLite/rAF.js "></script>
+<script src="js/TweenLite/demo-1.js "></script>
+<script src="res/layer/layer.js"></script>
+<script>
+    let r = true;
+    let $url = "";
+    $.getJSON("res/serverconfig.json", (responseText) => {
+        $url = responseText.protocol + responseText.domain + responseText.port + responseText.context;
+    })
+    $(function() {
+        $("#loginBtn").click(function(event) {
+            let account = $("#account").val
+            let password = $("#password").val
+            if ("" == $.trim(account)) {
+                Tip("请填写账号！")
+                $("#account").focus();
+            } else if ("" == $.trim("#password")) {
+                Tip('请填写密码');
+                $("#password").focus();
+            } else {
+                if ("" == $.trim($url)) {
+                    Tip('服务器小故障');
+                    return;
+                }
+                $.ajax({
+                    type: "post",
+                    url: $url + "/login.action?methodName=login",
+                    dataType: "json",
+                    data: $("#form_login").serialize(),
+
+                    success: (responseText) => {
+                        switch (responseText.status) {
+                            case "success":
+
+                                sessionStorage.setItem("JianShen", JSON.stringify(responseText.JianShen));
+
+                                window.location.replace("main.html");
+                                break;
+                            default:
+                                Tip('账号或者密码错误');
+                                $("#password").focus();
+                                break;
+                        }
+                    },
+                    error: () => {
+                        Tip('服务器大病了');
+                    }
+                })
+            }
+        })
+        $("#loginFace").click(function() {
+            showFace();
+            if (!r) {
+                FaceDetect();
+            }
+
+        })
+    })
+    window.onload = openUserMedia;
+
+    /*
+    在用getUserMediaToPhoto之前要写两个回调函数，一个success 一个 error
+    格式：
+     function success(stream){
+     }
+    //失败回调函数
+    function error(error) {
+    }
+    */
+    //成功回调函数
+    var video = document.getElementById("video");
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    var mediaStreamTrack = null;
+
+    function success(stream) {
+        //兼容webkit核心浏览器
+        // var CompatibleURL = window.URL || window.webkitURL;
+        //将视频流转化为video的源
+        mediaStreamTrack = stream;
+        try {
+            // video.src = CompatibleURL.createObjectURL(stream);
+            video.srcObject = stream;
+        } catch (e) {
+            console.log("访问用户媒体设备失败：", error.name, error.message);
+        }
+
+        video.play(); //播放视频
+
+        //将视频绘制到canvas上
+    }
+    //错误回调函数
+    function error(error) {
+        console.log('访问用户媒体失败：', error.name, error.message);
+    }
+
+    function getUserMediaToPhoto(constraints, success, error) {
+        if (navigator.mediaDevices.getUserMedia) {
+            //最新标准API
+            navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
+        } else if (navigator.webkitGetUserMedia) {
+            //webkit核心浏览器
+            navigator.webkitGetUserMedia(constraints, success, error);
+        } else if (navigator.mozGetUserMedia) {
+            //firefox浏览器
+            navigator.mozGetUserMedia(constraints, success, error);
+        } else if (navigator.getUserMedia) {
+            //旧版API
+            navigator.getUserMedia(constraints, success, error);
+        }
+    }
+
+    function getFace() {
+        context.drawImage(video, 0, 0, 534, 400);
+        this.img = canvas.toDataURL('image/jpg')
+            //获取完整的base64编码
+        this.img = img.split(',')[1];
+        return this.img;
+    }
+
+    function openUserMedia() {
+        if (navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia) {
+            getUserMediaToPhoto({
+                video: {
+                    width: 534,
+                    height: 400,
+                    facingMode: "user"
+                }
+            }, success, error);
+        } else {
+            alert('你的浏览器不支持访问用户媒体设备');
+        }
+    }
+
+    function offUserMedia() {
+        if (mediaStreamTrack != null)
+            mediaStreamTrack.getTracks()[0].stop();
+    }
+
+    function FaceDetect() {
+        setTimeout(function() {
+            let img = getFace();
+            window.console.log("*************" + img);
+            $.ajax({
+                type: "post",
+                url: "http://localhost:8080/jianshen/face.action?methodName=faceDetect",
+                data: {
+                    "img": img
+                },
+                dataType: "json",
+                success: function(responseText) {
+
+                    if (responseText.error_code == 0) {
+                        //调用注册  
+                        Facelogin(img)
+                    } else {
+
+                        FaceDetect();
+                    }
+                },
+                error: function() {
+                    alert("1连接服务器失败")
+                },
+                async: true
+            })
+        }, 1000);
+    }
+
+    function Facelogin(img) {
+        setTimeout(function() {
+            $.ajax({
+                type: "post",
+                url: $url + "/face.action?methodName=faceSearch",
+                data: {
+                    "img": img
+                },
+                async: true,
+                dataType: "json",
+                success: function(responseText) {
+                    switch (responseText.status) {
+                        case "success":
+                            alert("登录成功")
+                            sessionStorage.setItem("JianShen", JSON.stringify(responseText.JianShen));
+
+                            window.location.replace("main.html");
+                            break;
+                        default:
+                            alert("查无此人")
+                            break;
+                    }
+                },
+                error: function() {
+                    alert("2连接服务器失败")
+                }
+
+            })
+        }, 500);
+    }
+
+
+
+    function showFace() {
+        r = !r
+        if (!r) {
+            $("#denglu").hide()
+            $("#faceDL").show()
+        } else {
+            $("#faceDL").hide()
+            $("#denglu").show()
+        }
+
+    }
+    //扫描线
+    function scan() {
+        var box = $("#faceDL")
+        $("#scan").css({
+            "bottom": box.height()
+        }).animate({
+            bottom: 0,
+        }, 2000, function() {
+            $(this).css({
+                "bottom": box.height()
+            })
+        })
+    }
+    //计时器
+    window.setInterval(scan, 2000)
+</script>
