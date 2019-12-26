@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<beans>
+		
+		
+		<bean id = "Dao" class = "cn.kgc.tangcco.tcbd1017.jsjl.dao.impl.DaoImpl"/>
+		<bean id = "OrderService" class = "cn.kgc.tangcco.tcbd1017.on.impl.OrderServiceImpl"/>
+
+		
+	</beans>
+
+
+
