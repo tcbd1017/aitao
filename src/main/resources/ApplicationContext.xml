@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<beans>
 		
-		
+
+		<bean id = "OrderDao" class = "cn.kgc.tangcco.tcbd1017.liufuxiang.dao.impl.OrderDaoImpl"/>
+		<bean id = "OrderService" class = "cn.kgc.tangcco.tcbd1017.liufuxiang.service.impl.OrderServiceImpl"/>
+
 		<bean id = "PlanDao" class = "cn.kgc.tangcco.tcbd1017.shaoyansong.dao.impl.PlanDaoImpl"/>
 		<bean id = "PlanService" class = "cn.kgc.tangcco.tcbd1017.shaoyansong.service.impl.PlanServiceImpl"/>
+
 
 		
 	</beans>
