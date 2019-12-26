@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>添加教练</title>
+		<link rel="stylesheet" type="text/css" href="css/layui/css/layui.css" />
+		<script src="js/jquery-3.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="css/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="deleteJL">
+			<form lay-filter="delJL" class="layui-form" action="" method="post">
+				<div class="layui-form-item">
+
+					<label class="layui-form-label">头像地址</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="headimg" name="headimg" value="" required lay-verify="required"
+						 placeholder="请添加图片地址" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">姓名</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="name" name="name" value="" required lay-verify="required" placeholder="请输入姓名"
+						 autocomplete="off" />
+					</div>
+
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">俱乐部名称</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="jlbname" name="jlbname" value="" required lay-verify="required"
+						 placeholder="请输入俱乐部名称" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">俱乐部地址</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="jlbaddress" name="jlbaddress" value="" required lay-verify="required"
+						 placeholder="请输入俱乐部地址" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">介绍</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="info" name="info" value="" required lay-verify="required" placeholder="请输入教练介绍"
+						 autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">证书图片地址</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="zhengshuimg" name="zhengshuimg" value="" required lay-verify="required"
+						 placeholder="请添加证书图片地址" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">证书名称</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="zhengshuname" name="zhengshuname" value="" required lay-verify="required"
+						 placeholder="请输入证书名字" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">证书颁发单位</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="zhengshujieshao" name="zhengshujieshao" value="" required lay-verify="required"
+						 placeholder="请输入证书颁发单位" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">证书介绍</label>
+					<div class="layui-input-inline">
+						<input class="layui-input" type="text" id="zhengshubanfadanwei" name="zhengshubanfadanwei" value="" required
+						 lay-verify="required" placeholder="请输入证书介绍" autocomplete="off" />
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn" id="xiugai"">提交</button>
+					<button type=" reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(function() {
+		let $data = sessionStorage.getItem("jianliandata");
+		let data = JSON.parse($data);
+		window.console.log("data" + data)
+		window.console.log(data.name)
+		$("#xiugai").click(function() {
+			xiugai(data);
+
+		})
+
+
+
+
+	})
+
+	function xiugai(jiaoliandata) {
+		window.console.log(jiaoliandata.name)
+		window.console.log("进到修改里边去了")
+		
+		let jiaolianname = jiaoliandata.name;
+		let jiaolianid = jiaoliandata.id;
+		let headimg = $("#headimg").val();
+		let name = $("#name").val();
+		let jlbname = $("#jlbname").val();
+		let jlbaddress = $("#jlbaddress").val();
+		let info = $("#info").val();
+		let zhengshuimg = $("#zhengshuimg").val()
+		let zhengshuname = $("#zhengshuname").val();
+		let zhengshubanfadanwei = $("#zhengshubanfadanwei").val();
+		let zhengshujieshao = $("#zhengshujieshao").val();
+		let data = {
+			headimg : headimg,
+			jiaolianname: jiaolianname,
+			jiaolianid: jiaolianid,
+			name: name,
+			jlbname: jlbname,
+			jlbaddress: jlbaddress,
+			info: info,
+			zhengshuimg : zhengshuimg,
+			zhengshuname: zhengshuname,
+			zhengshubanfadanwei: zhengshubanfadanwei,
+			zhengshujieshao: zhengshujieshao
+
+		};
+		$.ajax({
+			type: "post",
+			dataType: "json",
+			url: "http://localhost:8080/jianshen/jiaolian.action?methodName=update",
+			data: data,
+			success: function(responseText) {
+				window.console.log(responseText)
+				switch (responseText.status) {
+
+					case "success":
+						// alert("修改成功")
+						layer.msg('修改中。。', {
+							icon: 6,
+							time: 2000 //2秒关闭（如果不配置，默认是3秒）
+						}, function() {
+							parent.location.reload()
+							// window.location.replace("info.html")
+						});
+						break;
+					default:
+						alert("修改失败")
+						break;
+				}
+			},
+			error: function() {
+
+				alert("数据端口异常")
+			}
+
+		})
+
+	}
+</script>

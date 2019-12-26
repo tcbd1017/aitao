@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" type="text/css" href="css/layui/css/layui.css" />
+		<title>Layui</title>
+
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+		<style type="text/css">
+			#divTianjia,
+			#divXiugai {
+				display: none;
+				height: 600px;
+				width: 600px;
+				position: absolute;
+				top: 50%;
+				left: 35%;
+				z-index: 10;
+				margin-top: -250px;
+				margin-left: -100;
+				background-color: aliceblue;
+			}
+
+			body {
+				background-color: cadetblue;
+			}
+			.close {
+				position: absolute;
+				right: 10px;
+				left: 580px;
+				color: black;
+				font-size: 16px;
+				z-index: 100;
+				cursor: pointer;
+			}
+
+			.con {
+				font-size: 25px;
+				color: #000000;
+				text-align: center;
+				position: relative;
+				z-index: 10;
+				line-height: 30px;
+			}
+
+			.bk {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				opacity: 0.5;
+				top: 0;
+				left: 0;
+			}
+
+			#jie,
+			#jv,
+			#shi {
+				margin-left: 135px;
+
+			}
+
+			#enter {}
+		</style>
+
+	</head>
+	<body>
+		<button class="layui-btn layui-btn-lg" id="add">添加</button>
+		<!-- </div> -->
+		<div class="layui-body">
+
+			<!-- 添加员工详细信息 -->
+			<div style="display: none;" id="addJiaolian">
+				<!-- <button type="button" class="layui-btn" id="test1">
+				  <i class="layui-icon">&#xe67c;</i>上传图片
+				</button> -->
+				<form lay-filter="jlInfo" class="layui-form" action="" method="post">
+					<div class="layui-form-item">
+						
+						<label class="layui-form-label">头像地址</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="headimg" name="headimg" value="" required lay-verify="required" placeholder="请添加图片地址"
+							 autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						
+						<label class="layui-form-label">姓名</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="name" name="name" value="" required lay-verify="required" placeholder="请输入姓名"
+							 autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">俱乐部名称</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="jlbname" name="jlbname" value="" required lay-verify="required"
+							 placeholder="请输入俱乐部名称" autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">俱乐部地址</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="jlbaddress" name="jlbaddress" value="" required lay-verify="required"
+							 placeholder="请输入俱乐部地址" autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">介绍</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="info" name="info" value="" required lay-verify="required" placeholder="请输入教练介绍"
+							 autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">证书图片地址</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="zhengshuimg" name="zhengshuimg" value="" required lay-verify="required"
+							 placeholder="请添加证书图片地址" autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">证书名称</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="zhengshuname" name="zhengshuname" value="" required lay-verify="required"
+							 placeholder="请输入证书名字" autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">证书颁发单位</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="zhengshujieshao" name="zhengshujieshao" value="" required lay-verify="required"
+							 placeholder="请输入证书颁发单位" autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">证书介绍</label>
+						<div class="layui-input-inline">
+							<input class="layui-input" type="text" id="zhengshubanfadanwei" name="zhengshubanfadanwei" value="" required
+							 lay-verify="required" placeholder="请输入证书介绍" autocomplete="off" />
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn" id="s" onclick="tianjia()">提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- 内容主体区域 -->
+			<div style="padding: 15px;">
+				<iframe src="" class="hide" frameborder="0" id="nows" style="width:100%;height: 300px"></iframe>
+				<!-- 显示部门内员工简略信息列表 -->
+				<table id="empList" lay-filter="empList"></table>
+			</div>
+			<!-- 内容主体区域 -->
+			<div style="padding: 15px;">
+				<iframe src="" class="hide" frameborder="0" id="nows" style="width:100%;height: 300px"></iframe>
+				<!-- 显示部门内员工简略信息列表 -->
+				<table id="empList" lay-filter="empList"></table>
+			</div>
+
+		</div>
+		<!-- 显示部门内员工简略信息列表 -->
+		<table id="empList" lay-filter="empList"></table>
+		</div>
+	</body>
+</html>
+<script src="js/jquery-3.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="css/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- <script>
+layui.use('upload', function(){
+  var upload = layui.upload;
+   
+  //执行实例
+  var uploadInst = upload.render({
+    elem: '#test1' //绑定元素
+    ,url: '/upload/' //上传接口
+    ,done: function(res){
+      //上传完毕回调
+    }
+    ,error: function(){
+      //请求异常回调
+    }
+  });
+});
+</script> -->
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<!-- <script>
+			
+		</script> -->
+<script>
+	$(function() {
+		queryJiaolian();
+
+		$("#add").click(function() {
+
+			addJiaolian();
+		})
+
+	});
+
+	function addJiaolian() {
+		window.console.log("进来了ad")
+		//iframe窗
+		layui.use(['element', 'layer', 'jquery', 'form'], function() {
+			let layer = layui.layer;
+			let form = layui.form;
+			let $ = layui.jquery;
+			index = layer.open({
+				type: 1,
+				// 结解决下拉列表遮挡
+				skin: 'to-fix-select',
+				//这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+				content: $('#addJiaolian'),
+				area: ['960px'],
+				shade: 0,
+				title: '添加教练',
+				anim: 0,
+				// btn: ['提交', '关闭'],
+				btnAlign: 'c',
+				cancel: function() {
+					//右上角关闭回调
+					// alert("cancel");
+					//  开启该代码可禁止点击该按钮关闭
+					$("#addJiaolian").hide()
+					return true;
+				},
+				success: function() {
+					window.console.log("提交之前")
+					form.on('submit(jlInfo)', function(data) {
+						window.console.log(data.field)
+					});
+				}
+			})
+		})
+		layui.use('upload', function(){
+		  var upload = layui.upload;
+		   
+		  //执行实例
+		  var uploadInst = upload.render({
+		    elem: '#test1' //绑定元素
+		    ,url: '/upload/' //上传接口
+		    ,done: function(res){
+		      //上传完毕回调
+		    }
+		    ,error: function(){
+		      //请求异常回调
+		    }
+		  });
+		});
+		 
+		function canvasDataURL(file, callback) { //压缩转化为base64
+		  var reader = new FileReader()
+		  reader.readAsDataURL(file)
+		  reader.onload = function (e) {
+		    const img = new Image()
+		    const quality = 0.8 // 图像质量
+		    const canvas = document.createElement('canvas')
+		    const drawer = canvas.getContext('2d')
+		    img.src = this.result
+		    img.onload = function () {
+		      canvas.width = img.width
+		      canvas.height = img.height
+		      drawer.drawImage(img, 0, 0, canvas.width, canvas.height)
+		      convertBase64UrlToBlob(canvas.toDataURL(file.type, quality), callback);
+		    }
+		  }
+		}
+		 
+		function convertBase64UrlToBlob(urlData, callback) { //将base64转化为文件格式
+		  const arr = urlData.split(',')
+		  const mime = arr[0].match(/:(.*?);/)[1]
+		  const bstr = atob(arr[1])
+		  let n = bstr.length
+		  const u8arr = new Uint8Array(n)
+		  while (n--) {
+		    u8arr[n] = bstr.charCodeAt(n)
+		  }
+		  callback(new Blob([u8arr], {
+		    type: mime
+		  }));
+		}
+	}
+	function xiugaiJiaolan() {
+		window.console.log("进来了ad")
+		//iframe窗
+		layui.use(['element', 'layer', 'jquery', 'form'], function() {
+			let layer = layui.layer;
+			let form = layui.form;
+			let $ = layui.jquery;
+			index = layer.open({
+				type: 1,
+				// 结解决下拉列表遮挡
+				skin: 'to-fix-select',
+				//这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+				content: $('#xiugaiJiaolian'),
+				area: ['960px'],
+				shade: 0,
+				title: '修改教练',
+				anim: 0,
+				// btn: ['提交', '关闭'],
+				btnAlign: 'c',
+				cancel: function() {
+					//右上角关闭回调
+					// alert("cancel");
+					//  开启该代码可禁止点击该按钮关闭
+					$("#xiugaiJiaolian").hide()
+					return true;
+				},
+				success: function() {
+					window.console.log("提交之前")
+					form.on('submit(jlInfo)', function(data) {
+						window.console.log(data.field)
+					});
+				}
+			})
+	
+		})
+	}
+	function queryJiaolian() {
+		layui.use(['table', 'form', 'laydate'], function() {
+			let table = layui.table;
+			let form = layui.form;
+			let laydate = layui.laydate;
+
+			let data = {
+				methodName: "select"
+			}
+			// let documentWidth =  $(this).width();
+			table.render({
+				where: data,
+				elem: '#empList'
+					// ,url:url + "/emp.action?methodName = queryEmps",
+					,
+				url: "http://localhost:8080/jianshen/jiaolian.action"
+					//全局定义常规单元格的最小宽度，layui 2.2.1 新增
+					// ,cellMinWidth: 80 
+					,
+				page: true,
+				limit: 10,
+				cols: [
+					[
+						, {
+							field: 'id',
+							// sort: true,
+							width: 60,
+							title: 'ID'
+						}, {
+							field: 'headimg',
+							width: 160,
+							title: '教练图片'
+						}, {
+							field: 'name',
+							width: 150,
+							title: '姓名'
+						}, {
+							field: 'jlbname',
+							width: 120,
+							title: '俱乐部名称'
+						}, {
+							field: 'jlbaddress',
+							width: 120,
+							title: '俱乐部地址'
+						}, {
+							field: 'info',
+							width: 270,
+							title: '教练介绍'
+						}, {
+							field: 'zhengshuname',
+							width: 120,
+							title: '证书名称'
+						}, {
+							field: 'zhengshuimg',
+							width: 250,
+							title: '证书图片'
+						}, {
+							field: 'zhengshubanfadanwei',
+							width: 120,
+							title: '证书颁发单位'
+						}, {
+							field: 'zhengshujieshao',
+							width: 120,
+							title: '证书介绍'
+						}, {fixed: 'right', width:200, align:'center', toolbar: '#barDemo',title : "操作"}
+					]
+				]
+			});
+		});
+	}
+	function tianjia(){
+		window.console.log("进到添加了")
+		let $headimg = $("#headimg").val();
+		let $name = $("#name").val();
+		let $jlbname = $("#jlbname").val();
+		let $jlbaddress = $("#jlbaddress").val();
+		let $info = $("#info").val();
+		let $zhengshuimg = $("#zhengshuimg").val();
+		let $zhengshuname = $("#zhengshuname").val();
+		let $zhengshubanfadanwei = $("#zhengshubanfadanwei").val();
+		let $zhengshujieshao = $("#zhengshujieshao").val();
+		window.console.log("name"+$name)
+			$.ajax({
+					   type : "post",
+					   url :  "http://localhost:8080/jianshen/jiaolian.action?methodName=add",
+					   data :{
+						   headimg : $headimg,
+						   name : $name ,
+					   jlbname : $jlbname ,					   
+					   jlbaddress : $jlbaddress ,
+					   info : $info ,
+					   zhengshuimg : $zhengshuimg,
+					   zhengshuname : $zhengshuname ,
+					   zhengshubanfadanwei : $zhengshubanfadanwei ,
+					   zhengshujieshao : $zhengshujieshao 					   
+					   },
+					   dataType : "json",
+					   success : function(responseText){
+						   window.console.log(responseText)
+						   switch (responseText.status){
+						   	case "success":
+							layer.msg('添加中。。', {
+							  icon: 6,
+							  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							  window.location.replace("info.html")
+							});
+						   		break;
+						   	default:
+								$("#msg").text("添加失败")
+						   		break;
+						   }
+					   },
+					   error : function(){			   
+						   $("#msg").text("数据接口异常")
+					   }	   
+			})
+		}
+	
+</script>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+	layui.use(['table', 'layer'], function() {
+		var table = layui.table;
+		var layer = layui.layer;
+		//监听工具条
+		table.on('tool(empList)', function(obj) {
+			var data = obj.data;
+			if (obj.event === 'detail') {
+				layer.msg('ID：' + data.id + ' 的查看操作');
+			} else if (obj.event === 'del') {
+				layer.confirm('真的删除吗', function(index) {
+					window.console.log(obj.data.name)
+					$.ajax({
+						type: "post",
+						dataType: "json",
+						url: "http://localhost:8080/jianshen/jiaolian.action?methodName=delete",
+						data: {
+							name: obj.data.name,
+							id: obj.data.id
+						},
+						success: function(responseText) {
+
+							switch (responseText.status) {
+
+								case "success":
+									obj.del();
+									layer.close(index);
+									break;
+								default:
+									alert("删除失败")
+									break;
+							}
+						},
+						error: function() {
+
+							alert("数据端口异常")
+						}
+					})
+
+				});
+			} else if (obj.event === 'edit') {
+				window.console.log(data.name)
+				window.console.log(JSON.stringify(data))
+				sessionStorage.setItem("jianliandata", JSON.stringify(data))
+				//iframe层
+				layer.open({
+
+					type: 2,
+					title: false,
+					closeBtn: 1, //显示关闭按钮
+					shade: [0],
+					maxmin: true, //开启最大化最小化按钮
+					title: "修改教练信息",
+					area: ['800px', '600px'],
+					offset: 'center', //右下角弹出
+					anim: 2,
+					content: ['updatejiaolian.html', 'no'], //iframe的url，no代表不显示滚动条
+				});
+			}
+		});
+	});
+</script>
